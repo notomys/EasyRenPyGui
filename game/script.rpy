@@ -29,6 +29,8 @@ label start:
     $ answer = renpy.input("Did you change the values at the top of options.rpy?").strip().lower()
 
     if answer == "yes":
+        $strength_current = 100
+        $ renpy.notify("Your strength went up!")
         "Good job"
     else:
         e "If not, you should do so right away! Saves will not work properly until you do."

@@ -90,11 +90,25 @@ screen quick_menu():
             textbutton _("Save") action ShowMenu('save')
             textbutton _("Prefs") action ShowMenu('preferences')
 
+    if not main_menu:
+        key "i" action ShowMenu("info_screen")
+
+
+screen info_overlay_button():
+
+    zorder 101
+
+    if quick_menu and not main_menu:
+        textbutton _("Info"):
+            style "info_overlay_button"
+            action ShowMenu("info_screen")
+
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
 init python:
     config.overlay_screens.append("quick_menu")
+    config.overlay_screens.append("info_overlay_button")
 
 default quick_menu = True
 
@@ -111,6 +125,21 @@ style quick_button_text:
     size 21
     selected_color '#f93c3e'
     idle_color "#aaa"
+
+
+style info_overlay_button:
+    xpos 0.985
+    ypos 0.02
+    xanchor 1.0
+    yanchor 0.0
+    background Frame("gui/button/choice_idle_background.png", 12, 12)
+    hover_background Frame("gui/button/choice_hover_background.png", 12, 12)
+    padding (20, 10, 20, 10)
+
+style info_overlay_button_text:
+    size 21
+    idle_color "#aaa"
+    hover_color "#ff8335"
 
 ## NVL screen ##################################################################
 ##

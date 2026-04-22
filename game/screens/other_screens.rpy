@@ -198,3 +198,186 @@ style help_label:
 style help_label_text:
     xalign 1.0
     textalign 1.0
+
+
+## Info screen #################################################################
+##
+## Standalone informational screen intended to be opened from in-game controls.
+
+## Skills tab defaults.
+## Add/remove entries here to change which skills are shown by default.
+define info_skills = (
+    {
+        "label": _("Strength"),
+        "current_var": "strength_current",
+        "max_var": "strength_max",
+    },
+    {
+        "label": _("Agility"),
+        "current_var": "agility_current",
+        "max_var": "agility_max",
+    },
+    {
+        "label": _("Intellect"),
+        "current_var": "intellect_current",
+        "max_var": "intellect_max",
+    },
+    {
+        "label": _("Charisma"),
+        "current_var": "charisma_current",
+        "max_var": "charisma_max",
+    },
+    {
+        "label": _("Endurance"),
+        "current_var": "endurance_current",
+        "max_var": "endurance_max",
+    },
+    {
+        "label": _("Luck"),
+        "current_var": "luck_current",
+        "max_var": "luck_max",
+    },
+)
+
+## These values are expected to change during gameplay.
+default strength_current = 35
+default strength_max = 100
+default agility_current = 48
+default agility_max = 100
+default intellect_current = 62
+default intellect_max = 100
+default charisma_current = 51
+default charisma_max = 100
+default endurance_current = 42
+default endurance_max = 100
+default luck_current = 27
+default luck_max = 100
+
+## Personality tab defaults.
+## Add/remove entries here to change which personality scales are shown.
+define info_personality_scales = (
+    {
+        "left_label": _("Introverted"),
+        "right_label": _("Extroverted"),
+        "value_var": "intro_extro_value",
+    },
+    {
+        "left_label": _("Logical"),
+        "right_label": _("Emotional"),
+        "value_var": "logical_emotional_value",
+    },
+    {
+        "left_label": _("Objective"),
+        "right_label": _("Intuitive"),
+        "value_var": "objective_intuitive_value",
+    },
+    {
+        "left_label": _("Modest"),
+        "right_label": _("Ambitious"),
+        "value_var": "modest_ambitious_value",
+    },
+)
+
+## 0 = left-side label, 100 = right-side label.
+default intro_extro_value = 40
+default logical_emotional_value = 55
+default objective_intuitive_value = 65
+default modest_ambitious_value = 35
+
+screen info_screen():
+
+    tag menu
+
+    default info_tab = "overview"
+
+    add HBox(Transform("#292835", xsize=350), "#21212db2") # The background; can be whatever
+
+    use game_menu(_("Info"))
+
+    viewport:
+        style_prefix "game_menu"
+        mousewheel True draggable True pagekeys True
+        scrollbars "vertical"
+
+        has vbox
+        spacing 18
+
+        hbox:
+            spacing 18
+
+            textbutton _("Overview"):
+                selected info_tab == "overview"
+                action SetScreenVariable("info_tab", "overview")
+
+            textbutton _("Skills"):
+                selected info_tab == "skills"
+                action SetScreenVariable("info_tab", "skills")
+
+            textbutton _("Personality"):
+                selected info_tab == "personality"
+                action SetScreenVariable("info_tab", "personality")
+
+        if info_tab == "skills":
+            use info_skills_tab
+        elif info_tab == "personality":
+            use info_personality_tab
+        else:
+            label _("Information")
+            text _("This is a placeholder info screen.")
+            text _("You can replace this content in a later template slice.")
+
+
+screen info_skills_tab():
+
+    vbox:
+        spacing 16
+
+        label _("Skills")
+
+        for skill in info_skills:
+            $ current_value = getattr(store, skill["current_var"])
+            $ max_value = getattr(store, skill["max_var"])
+            $ clamped_max = max(1, max_value)
+
+            vbox:
+                spacing 6
+
+                hbox:
+                    xfill True
+
+                    text "[skill['label']]"
+                    text "[current_value]/[max_value]" xalign 1.0
+
+                bar value AnimatedValue(value=current_value, range=clamped_max, delay=0.0):
+                    xfill True
+
+
+screen info_personality_tab():
+
+    vbox:
+        spacing 18
+
+        label _("Personality")
+
+        for scale in info_personality_scales:
+            $ scale_value = getattr(store, scale["value_var"])
+            $ clamped_value = max(0, min(100, scale_value))
+
+            vbox:
+                spacing 6
+
+                hbox:
+                    xfill True
+                    text "[scale['left_label']]"
+                    text "[scale['right_label']]" xalign 1.0
+
+                hbox:
+                    spacing 12
+                    xfill True
+
+                    #text "[scale['left_label']]"
+
+                    bar value AnimatedValue(value=clamped_value, range=100, delay=0.0):
+                        xfill True
+
+                    text "[scale['right_label']]"
