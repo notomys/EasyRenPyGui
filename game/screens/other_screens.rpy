@@ -103,6 +103,14 @@ screen keyboard_help():
         text _("Accesses the game menu.")
 
     hbox:
+        label "I"
+        text _("Opens the info menu.")
+
+    hbox:
+        label "C"
+        text _("Opens the calendar menu.")
+
+    hbox:
         label _("Ctrl")
         text _("Skips dialogue while held down.")
 

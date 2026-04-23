@@ -92,6 +92,7 @@ screen quick_menu():
 
     if not main_menu:
         key "i" action ShowMenu("info_screen")
+        key "c" action ShowMenu("calendar_menu")
 
 
 screen info_overlay_button():
@@ -104,11 +105,23 @@ screen info_overlay_button():
             action ShowMenu("info_screen")
 
 
+## Top-left calendar shortcut (Info uses top-right; same zorder, no overlap).
+screen calendar_overlay_button():
+
+    zorder 101
+
+    if quick_menu and not main_menu:
+        textbutton _("Calendar"):
+            style "calendar_overlay_button"
+            action ShowMenu("calendar_menu")
+
+
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
 init python:
     config.overlay_screens.append("quick_menu")
     config.overlay_screens.append("info_overlay_button")
+    config.overlay_screens.append("calendar_overlay_button")
 
 default quick_menu = True
 
@@ -137,6 +150,21 @@ style info_overlay_button:
     padding (20, 10, 20, 10)
 
 style info_overlay_button_text:
+    size 21
+    idle_color "#aaa"
+    hover_color "#ff8335"
+
+
+style calendar_overlay_button:
+    xpos 0.015
+    ypos 0.02
+    xanchor 0.0
+    yanchor 0.0
+    background Frame("gui/button/choice_idle_background.png", 12, 12)
+    hover_background Frame("gui/button/choice_hover_background.png", 12, 12)
+    padding (20, 10, 20, 10)
+
+style calendar_overlay_button_text:
     size 21
     idle_color "#aaa"
     hover_color "#ff8335"

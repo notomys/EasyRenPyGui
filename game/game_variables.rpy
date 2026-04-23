@@ -1,6 +1,6 @@
 ## Game variables ##############################################################
 ##
-## Developer customization entrypoint for the Info screen.
+## Developer customization entrypoint for template data (Info screen, calendar cycle, etc.).
 ## Edit this file to add/remove rows and tweak starting values.
 
 
@@ -128,3 +128,45 @@ default yellow_friendship_rivalry = 50
 default red_romance = 0
 default blue_romance = 0
 default yellow_romance = 0
+
+
+## Calendar ####################################################################
+##
+## Used by calendar_menu. Menu UI index helpers: game/screens/calendar_menu.rpy (init python).
+##
+## calendar_cycle / calendar_period — persist with the save; index into the tuples below.
+## calendar_cycle_index / calendar_period_index — only while the calendar screen is open;
+## they are filled from the pair above when the screen opens and do not write back.
+##
+## Rows in the calendar menu left column (weekdays in this template).
+define calendar_periods = (
+    {"id": "mon", "label": _("Monday")},
+    {"id": "tue", "label": _("Tuesday")},
+    {"id": "wed", "label": _("Wednesday")},
+    {"id": "thu", "label": _("Thursday")},
+    {"id": "fri", "label": _("Friday")},
+    {"id": "sat", "label": _("Saturday")},
+    {"id": "sun", "label": _("Sunday")},
+)
+
+## Week (or other) cycles; ids pair with calendar_periods ids for future lookups.
+define calendar_cycles = (
+    {"id": "one", "label": _("Week 1")},
+    {"id": "two", "label": _("Week 2")},
+    {"id": "three", "label": _("Week 3")},
+)
+
+## Inclusive highest allowed cycle index (0-based), derived from calendar_cycles.
+## Caps calendar menu Prev/Next and how many distinct cycles the game allows.
+## To cap below the full tuple, replace this line with a literal (e.g. define max_cycles = 1).
+define max_cycles = len(calendar_cycles) - 1
+
+## Current week (or other cycle). Your script updates this; the menu mirrors it on open.
+default calendar_cycle = 0
+
+## Current day (or other period). Same pattern as calendar_cycle.
+default calendar_period = 0
+
+## Browsing indices for the calendar screen only (see block comment above).
+default calendar_cycle_index = 0
+default calendar_period_index = 0

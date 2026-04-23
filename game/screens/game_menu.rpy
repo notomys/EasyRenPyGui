@@ -23,6 +23,8 @@ screen game_menu(title):
 
         else:
 
+            textbutton _("Calendar") action ShowMenu("calendar_menu")
+
             textbutton _("Info") action ShowMenu("info_screen")
 
             textbutton _("History") action ShowMenu("history")
