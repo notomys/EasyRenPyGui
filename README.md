@@ -1,3 +1,7 @@
+# Raising Sim Engine (Plus Easy Ren'Py GUI)
+
+This is intended to be used as a template for Ren'py games that have stat raising components. I've built it on top of Fenik's easy Ren'Py GUI because I enjoy the QoL/Stylistic changes. 
+
 # Easy Ren'Py GUI
 
 A template project intended to make it easier to replace the default GUI. This project has ripped out most of the gui properties so that you are left only with the defaults and simplifies styles so that they are easier to understand and modify.
