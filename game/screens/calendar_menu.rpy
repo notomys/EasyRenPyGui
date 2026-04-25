@@ -4,38 +4,28 @@
 ## leave with Return or Close.
 ##
 ## Store-backed tuples and defaults: game/game_variables.rpy.
+## Backend progression and shared bound/clamp helpers live in game/utilities.rpy.
 ##
 ## Index sync/clamp (init python below): keeps *_index variables in range, copies from
 ## calendar_cycle / calendar_period on screen show, and never assigns to those store fields.
 
 init python:
 
-    def _calendar_cycle_index_upper():
-        # Author cap (max_cycles) and tuple length; both are inclusive high indices.
-        return min(store.max_cycles, len(store.calendar_cycles) - 1)
-
-    def _calendar_period_index_upper():
-        return len(store.calendar_periods) - 1
-
     def calendar_cycle_index_reset_from_store():
-        u = _calendar_cycle_index_upper()
-        store.calendar_cycle_index = max(0, min(store.calendar_cycle, u))
+        store.calendar_cycle_index = clamp_calendar_cycle_index(store.calendar_cycle)
 
     def calendar_period_index_reset_from_store():
-        u = _calendar_period_index_upper()
-        store.calendar_period_index = max(0, min(store.calendar_period, u))
+        store.calendar_period_index = clamp_calendar_period_index(store.calendar_period)
 
     def calendar_menu_reset_from_store():
         calendar_cycle_index_reset_from_store()
         calendar_period_index_reset_from_store()
 
     def calendar_cycle_index_clamp():
-        u = _calendar_cycle_index_upper()
-        store.calendar_cycle_index = max(0, min(store.calendar_cycle_index, u))
+        store.calendar_cycle_index = clamp_calendar_cycle_index(store.calendar_cycle_index)
 
     def calendar_period_index_clamp():
-        u = _calendar_period_index_upper()
-        store.calendar_period_index = max(0, min(store.calendar_period_index, u))
+        store.calendar_period_index = clamp_calendar_period_index(store.calendar_period_index)
 
 
 screen calendar_menu():
@@ -71,7 +61,7 @@ screen calendar_menu():
                         Function(calendar_cycle_index_clamp),
                     ]
 
-            if calendar_cycle_index < max_cycles:
+            if calendar_cycle_index < get_calendar_cycle_upper_index():
                 textbutton _("Next"):
                     action [
                         SetVariable("calendar_cycle_index", calendar_cycle_index + 1),

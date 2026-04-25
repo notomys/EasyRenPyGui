@@ -111,7 +111,10 @@ screen calendar_overlay_button():
     zorder 101
 
     if quick_menu and not main_menu:
-        textbutton _("Calendar"):
+        $ _period_label = get_safe_calendar_period_label()
+        $ _cycle_label = get_safe_calendar_cycle_label()
+
+        textbutton "[_period_label], [_cycle_label]":
             style "calendar_overlay_button"
             action ShowMenu("calendar_menu")
 

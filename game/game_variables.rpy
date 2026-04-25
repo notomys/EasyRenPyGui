@@ -132,10 +132,11 @@ default yellow_romance = 0
 
 ## Calendar ####################################################################
 ##
-## Used by calendar_menu. Menu UI index helpers: game/screens/calendar_menu.rpy (init python).
+## Backend progression helpers (increment/wrap): game/utilities.rpy.
+## calendar_menu UI index helpers (sync/clamp only): game/screens/calendar_menu.rpy (init python).
 ##
-## calendar_cycle / calendar_period — persist with the save; index into the tuples below.
-## calendar_cycle_index / calendar_period_index — only while the calendar screen is open;
+## calendar_cycle / calendar_period — persistent gameplay state; index into the tuples below.
+## calendar_cycle_index / calendar_period_index — UI browsing state for calendar_menu only;
 ## they are filled from the pair above when the screen opens and do not write back.
 ##
 ## Rows in the calendar menu left column (weekdays in this template).
@@ -155,11 +156,6 @@ define calendar_cycles = (
     {"id": "two", "label": _("Week 2")},
     {"id": "three", "label": _("Week 3")},
 )
-
-## Inclusive highest allowed cycle index (0-based), derived from calendar_cycles.
-## Caps calendar menu Prev/Next and how many distinct cycles the game allows.
-## To cap below the full tuple, replace this line with a literal (e.g. define max_cycles = 1).
-define max_cycles = len(calendar_cycles) - 1
 
 ## Current week (or other cycle). Your script updates this; the menu mirrors it on open.
 default calendar_cycle = 0
