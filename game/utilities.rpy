@@ -19,6 +19,7 @@ init python:
         return store.calendar_cycle
 
     ## Call from script/gameplay flow to advance story time by period (day).
+    ## When period wraps from last index back to 0, this also advances cycle.
     ## Example use: `$ increment_calendar_period()` inside labels/events.
     def increment_calendar_period(step=1):
         u = get_calendar_period_upper_index()
@@ -26,7 +27,13 @@ init python:
             store.calendar_period = 0
             return store.calendar_period
 
-        store.calendar_period = (store.calendar_period + int(step)) % (u + 1)
+        next_period = store.calendar_period + int(step)
+        if next_period > u:
+            store.calendar_period = 0
+            increment_calendar_cycle()
+            return store.calendar_period
+
+        store.calendar_period = next_period
         return store.calendar_period
 
     ## UI helper: highest valid index for calendar_cycles.

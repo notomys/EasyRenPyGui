@@ -29,7 +29,7 @@ label start:
     $ answer = renpy.input("Did you change the values at the top of options.rpy?").strip().lower()
 
     if answer == "yes":
-        $strength_current = 100
+        $ strength_current = 100
         $ renpy.notify("Your strength went up!")
         $ increment_calendar_cycle()
         "Good job, let's go to the next week."
